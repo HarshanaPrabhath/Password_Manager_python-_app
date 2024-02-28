@@ -1,11 +1,52 @@
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
 from tkinter import *
+from tkinter import messagebox
+from random import randint, choice, shuffle
+
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+           'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+           'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+password_letters = [random.choice(letters) for _ in range(randint(8, 10))]
+password_symbols = [random.choice(symbols) for _ in range(randint(2, 4))]
+password_numbers = [random.choice(numbers) for _ in range(random.randint(2, 4))]
+
+password_list = password_letters + password_symbols + password_numbers
+
+random.shuffle(password_list)
+
+password = ""
+for char in password_list:
+    password += char
+
+print(f"Your password is: {password}")
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-with open("save_passwords", "w") as pass_doc:
-    a =
-    pass_doc.write()
 
+# function what run after clicked add button
+def save_password():
+    website_data = website_entry.get()
+    email_username_data = email_username_entry.get()
+    password_data = password_entry.get()
+
+    if len(website_data) == 0 or len(email_username_data) == 0 or len(password_data) == 0:
+        messagebox.showinfo(title="Empty Details", message="Please fill in all the details")
+
+    else:
+        ask_ok_cancel = messagebox.askokcancel(title=f"{website_data} email & password",
+                                               message=f"These are details you entered:\nEmail : {email_username_data}\n"
+                                                       f"Password: {password_data}\n is it ok to save?")
+
+        if ask_ok_cancel:
+            with open("save_passwords", "a") as pass_doc:
+                pass_doc.write(f"{website_data} | {email_username_data} | {password_data}\n")
+
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -45,7 +86,7 @@ password_entry.grid(row=3, column=1, sticky="w")
 generate_password = Button(text="Generate Password")
 generate_password.grid(row=3, column=2, pady=(0, 7))
 
-add = Button(text="Add", width=38)
+add = Button(text="Add", width=38, command=save_password)
 add.grid(row=4, column=1, columnspan=2, sticky="w")
 
 window.mainloop()
