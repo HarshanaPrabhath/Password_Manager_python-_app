@@ -2,27 +2,32 @@ from tkinter import *
 from tkinter import messagebox
 from random import randint, choice, shuffle
 
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-           'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-           'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+def generate_password():
+    password_entry.delete(0, END)
 
-password_letters = [random.choice(letters) for _ in range(randint(8, 10))]
-password_symbols = [random.choice(symbols) for _ in range(randint(2, 4))]
-password_numbers = [random.choice(numbers) for _ in range(random.randint(2, 4))]
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v',
+               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+               'R',
+               'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-password_list = password_letters + password_symbols + password_numbers
+    # get password characters using list comprehension
+    password_letters = [choice(letters) for _ in range(5)]
+    password_symbols = [choice(symbols) for _ in range(2)]
+    password_numbers = [choice(numbers) for _ in range(2)]
 
-random.shuffle(password_list)
+    password_list = password_letters + password_symbols + password_numbers
 
-password = ""
-for char in password_list:
-    password += char
+    shuffle(password_list)
 
-print(f"Your password is: {password}")
+    password = "".join(password_list)
+    # insert generated password to entry box
+    password_entry.insert(0, f"{password}")
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -83,7 +88,7 @@ password_entry = Entry(width=24)
 password_entry.grid(row=3, column=1, sticky="w")
 
 # creating buttons
-generate_password = Button(text="Generate Password")
+generate_password = Button(text="Generate Password", command=generate_password)
 generate_password.grid(row=3, column=2, pady=(0, 7))
 
 add = Button(text="Add", width=38, command=save_password)
